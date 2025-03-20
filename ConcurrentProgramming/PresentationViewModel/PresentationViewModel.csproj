@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>FW_LJ_CP.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<AssemblyName>FW_LJ_CP.$(MSBuildProjectName)</AssemblyName>
+		<VersionPrefix>4.2.0</VersionPrefix>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702;IDE0001</NoWarn>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;IDE0001</NoWarn>
+	</PropertyGroup>
+	<!--
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	-->
+	<ItemGroup>
+		<ProjectReference Include="..\PresentationModel\PresentationModel.csproj" />
+	</ItemGroup>
+</Project>

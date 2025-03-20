@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<StartupObject>FW_LJ_CP.PresentationView.App</StartupObject>
+		<AssemblyName>FW_LJ_CP.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>FW_LJ_CP.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<VersionPrefix>4.2.0</VersionPrefix>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>1701;1702;IDE0001</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;IDE0001</NoWarn>
+	</PropertyGroup>
+	<!--
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+-->
+	<ItemGroup>
+		<ProjectReference Include="..\PresentationViewModel\PresentationViewModel.csproj" />
+	</ItemGroup>
+
+</Project>
