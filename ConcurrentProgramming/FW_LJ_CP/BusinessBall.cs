@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-namespace FW_LJ_CP.BusinessLogic
+﻿namespace FW_LJ_CP.BusinessLogic
 {
   internal class Ball : IBall
 {
