@@ -6,7 +6,6 @@
 		<VersionPrefix>4.3.0</VersionPrefix>
 	</PropertyGroup>
 	<ItemGroup>
-<!--		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" /> -->
 		<PackageReference Include="System.Reactive" Version="6.0.1" />
 	</ItemGroup>
 	<ItemGroup>

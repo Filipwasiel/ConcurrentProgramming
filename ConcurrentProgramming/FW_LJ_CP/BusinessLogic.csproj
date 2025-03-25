@@ -7,11 +7,6 @@
 		<AssemblyName>FW_LJ_CP.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>FW_LJ_CP.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
-<!--
-	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	</ItemGroup>
--->
 	<ItemGroup>
 		<ProjectReference Include="..\Data\Data.csproj" />
 	</ItemGroup>
