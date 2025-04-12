@@ -9,7 +9,7 @@ namespace FW_LJ_CP.Presentation.Model.Test
         {
             ModelBall ball = new ModelBall(0.0, 0.0, new BusinessLogicIBallFixture());
             Assert.Equal<double>(0.0, ball.Top);
-            Assert.Equal<double>(0.0, ball.Top);
+            Assert.Equal<double>(0.0, ball.Left);
         }
 
         [Fact]

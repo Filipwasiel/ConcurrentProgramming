@@ -2,12 +2,6 @@ namespace FW_LJ_CP.Data.Test
 {
     public class BallUnitTest
     {
-        [Fact]
-        public void ConstructorTestMethod()
-        {
-            Vector testinVector = new Vector(0.0, 0.0);
-            Ball newInstance = new(testinVector, testinVector);
-        }
 
         [Fact]
         public void MoveTestMethod()
@@ -18,8 +12,12 @@ namespace FW_LJ_CP.Data.Test
             int numberOfCallBackCalled = 0;
             newInstance.NewPositionNotification += (sender, position) => { Assert.NotNull(sender); curentPosition = position; numberOfCallBackCalled++; };
             newInstance.Move(new Vector(0.0, 0.0));
-            Assert.Equal<int>(1, numberOfCallBackCalled);
-            Assert.Equal<IVector>(initialPosition, curentPosition);
+            newInstance.Move(new Vector(1.0, 1.0));
+            newInstance.Move(new Vector(10.0, 10.0));
+            Assert.Equal<int>(3, numberOfCallBackCalled);
+            Assert.Equal<IVector>(new Vector(21.0, 21.0), curentPosition);
+            Console.WriteLine(initialPosition);
+            Console.WriteLine(curentPosition);
         }
     }
 }

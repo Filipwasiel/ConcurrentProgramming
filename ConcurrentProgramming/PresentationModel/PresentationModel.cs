@@ -1,5 +1,4 @@
-﻿using FW_LJ_CP.Presentation.Model;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -31,9 +30,17 @@ namespace FW_LJ_CP.Presentation.Model
             Disposed = true;
         }
 
+        public void setNotDisposed()
+        {
+            Disposed = false;
+        }
+
         public override IDisposable Subscribe(IObserver<IBall> observer)
         {
-            return eventObservable.Subscribe(x => observer.OnNext(x.EventArgs.Ball), ex => observer.OnError(ex), () => observer.OnCompleted());
+            return eventObservable.Subscribe(
+                x => observer.OnNext(x.EventArgs.Ball), 
+                ex => observer.OnError(ex), 
+                () => observer.OnCompleted());
         }
 
         public override void Start(int numberOfBalls)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using FW_LJ_CP.Presentation.Model;
 using FW_LJ_CP.Presentation.ViewModel.MVVMLight;
 using ModelIBall = FW_LJ_CP.Presentation.Model.IBall;
@@ -17,18 +18,37 @@ namespace FW_LJ_CP.Presentation.ViewModel
         {
             ModelLayer = modelLayerAPI == null ? ModelAbstractApi.CreateModel() : modelLayerAPI;
             Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
+
+            _startCommand = new RelayCommand(
+                execute: () => Start(NumberOfBalls),
+                canExecute: () => NumberOfBalls > 0 && _isEnabled);
         }
 
         #endregion ctor
 
         #region public API
 
+        public int NumberOfBalls
+        {
+            get => _numberOfBalls;
+            set
+            {
+                _numberOfBalls = value;
+                RaisePropertyChanged();
+                _startCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public ICommand StartCommand => _startCommand;
+
         public void Start(int numberOfBalls)
         {
             if (Disposed)
                 throw new ObjectDisposedException(nameof(MainWindowViewModel));
+            Balls.Clear();
             ModelLayer.Start(numberOfBalls);
-            Observer.Dispose();
+            Observer?.Dispose();
+            Observer = ModelLayer.Subscribe<ModelIBall>(x => Balls.Add(x));
         }
 
         public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
@@ -43,6 +63,8 @@ namespace FW_LJ_CP.Presentation.ViewModel
             {
                 if (disposing)
                 {
+                    _isEnabled = false;
+                    _startCommand.RaiseCanExecuteChanged();
                     Balls.Clear();
                     Observer.Dispose();
                     ModelLayer.Dispose();
@@ -62,10 +84,14 @@ namespace FW_LJ_CP.Presentation.ViewModel
             GC.SuppressFinalize(this);
         }
 
+
         #endregion IDisposable
 
         #region private
 
+        private int _numberOfBalls;
+        private bool _isEnabled = true;
+        private readonly RelayCommand _startCommand;
         private IDisposable Observer = null;
         private ModelAbstractApi ModelLayer;
         private bool Disposed = false;
