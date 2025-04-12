@@ -45,11 +45,7 @@ namespace FW_LJ_CP.Presentation.ViewModel.MVVMLight
         /// <returns><c>true</c> if this command can be executed; otherwise, <c>false</c>.</returns>
         public bool CanExecute(object parameter)
         {
-            if (this.m_CanExecute == null)
-                return true;
-            if (parameter == null)
-                return this.m_CanExecute();
-            return this.m_CanExecute();
+            return m_CanExecute?.Invoke() ?? true;
         }
 
         /// <summary>
