@@ -21,7 +21,7 @@ namespace FW_LJ_CP.Presentation.ViewModel
 
             _startCommand = new RelayCommand(
                 execute: () => Start(NumberOfBalls),
-                canExecute: () => NumberOfBalls > 0 && _isEnabled);
+                canExecute: () => NumberOfBalls > 0 && NumberOfBalls < 17 && !Disposed);
         }
 
         #endregion ctor
@@ -63,7 +63,6 @@ namespace FW_LJ_CP.Presentation.ViewModel
             {
                 if (disposing)
                 {
-                    _isEnabled = false;
                     _startCommand.RaiseCanExecuteChanged();
                     Balls.Clear();
                     Observer.Dispose();
@@ -90,7 +89,6 @@ namespace FW_LJ_CP.Presentation.ViewModel
         #region private
 
         private int _numberOfBalls;
-        private bool _isEnabled = true;
         private readonly RelayCommand _startCommand;
         private IDisposable Observer = null;
         private ModelAbstractApi ModelLayer;

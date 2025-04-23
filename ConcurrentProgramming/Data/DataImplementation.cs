@@ -8,7 +8,7 @@ namespace FW_LJ_CP.Data
 
         public DataImplementation()
         {
-            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(16.67));
         }
 
         #endregion ctor
@@ -25,7 +25,8 @@ namespace FW_LJ_CP.Data
             for (int i = 0; i < numberOfBalls; i++)
             {
                 Vector startingPosition = new(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
-                Ball newBall = new(startingPosition, startingPosition);
+                Vector startingVelocity = new((random.NextDouble() - 0.5) * 10, (random.NextDouble() - 0.5) * 10);
+                Ball newBall = new(startingPosition, startingVelocity);
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
             }
@@ -71,7 +72,7 @@ namespace FW_LJ_CP.Data
         private void Move(object? x)
         {
             foreach (Ball item in BallsList)
-                item.Move(new Vector((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10));
+                item.Move(new Vector(item.Velocity.x, item.Velocity.y));
         }
 
         #endregion private

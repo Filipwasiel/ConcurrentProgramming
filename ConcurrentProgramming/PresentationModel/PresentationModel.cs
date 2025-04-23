@@ -30,11 +30,6 @@ namespace FW_LJ_CP.Presentation.Model
             Disposed = true;
         }
 
-        public void setNotDisposed()
-        {
-            Disposed = false;
-        }
-
         public override IDisposable Subscribe(IObserver<IBall> observer)
         {
             return eventObservable.Subscribe(

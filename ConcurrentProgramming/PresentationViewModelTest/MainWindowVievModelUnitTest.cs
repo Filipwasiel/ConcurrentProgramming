@@ -24,7 +24,7 @@ namespace FW_LJ_CP.Presentation.ViewModel.Test
                 Assert.NotNull(viewModel.Balls);
                 Assert.Equal<int>(0, nullModelFixture.Disposed);
                 Assert.Equal<int>(numberOfBalls, nullModelFixture.Started);
-                Assert.Equal<int>(1, nullModelFixture.Subscribed);
+                Assert.Equal<int>(2, nullModelFixture.Subscribed);
             }
             Assert.Equal<int>(1, nullModelFixture.Disposed);
         }
