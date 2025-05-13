@@ -46,6 +46,7 @@
     public interface IBall
     {
         event EventHandler<IVector> NewPositionNotification;
+        double Diameter { get; }
 
         IVector Velocity { get; set; }
     }

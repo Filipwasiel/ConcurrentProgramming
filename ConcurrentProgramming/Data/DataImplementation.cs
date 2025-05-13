@@ -26,7 +26,8 @@ namespace FW_LJ_CP.Data
             {
                 Vector startingPosition = new(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
                 Vector startingVelocity = new((random.NextDouble() - 0.5) * 10, (random.NextDouble() - 0.5) * 10);
-                Ball newBall = new(startingPosition, startingVelocity);
+                double randomMass = 1.0 + random.NextDouble() * 0.5; 
+                Ball newBall = new(startingPosition, startingVelocity, randomMass);
                 upperLayerHandler(startingPosition, newBall);
                 BallsList.Add(newBall);
             }
@@ -62,6 +63,8 @@ namespace FW_LJ_CP.Data
 
         #region private
 
+        private readonly object _lock = new();
+
         //private bool disposedValue;
         private bool Disposed = false;
 
@@ -71,8 +74,13 @@ namespace FW_LJ_CP.Data
 
         private void Move(object? x)
         {
-            foreach (Ball item in BallsList)
-                item.Move(new Vector(item.Velocity.x, item.Velocity.y));
+            lock (_lock)
+            {
+                foreach (Ball item in BallsList) 
+                {
+                    item.Move(new Vector(item.Velocity.x, item.Velocity.y));
+                }
+            }
         }
 
         #endregion private

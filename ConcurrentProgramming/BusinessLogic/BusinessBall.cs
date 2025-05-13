@@ -5,18 +5,23 @@ namespace FW_LJ_CP.BusinessLogic
 {
     public Ball(Data.IBall ball)
     {
-        ball.NewPositionNotification += RaisePositionChangeEvent;
+            _ball = ball;
+            ball.NewPositionNotification += RaisePositionChangeEvent;
     }
 
     #region IBall
 
     public event EventHandler<IPosition>? NewPositionNotification;
 
-    #endregion IBall
+        public double Diameter => _ball.Diameter;
 
-    #region private
+        #endregion IBall
 
-    private void RaisePositionChangeEvent(object? sender, Data.IVector e)
+        #region private
+
+        private readonly Data.IBall _ball;
+
+        private void RaisePositionChangeEvent(object? sender, Data.IVector e)
     {
         NewPositionNotification?.Invoke(this, new Position(e.x, e.y));
     }
