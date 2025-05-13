@@ -28,9 +28,9 @@ namespace FW_LJ_CP.Data
 
         #region private
 
-        private Vector Position;
+        internal Vector Position { get; private set; }
 
-    public const double TableWidth = 400;
+        public const double TableWidth = 400;
     public const double TableHeight = 420;
 
         private void RaiseNewPositionChangeNotification()
