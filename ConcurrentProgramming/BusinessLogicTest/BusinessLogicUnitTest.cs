@@ -103,6 +103,8 @@ namespace FW_LJ_CP.BusinessLogic.Test
                 public IVector Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
                 public event EventHandler<IVector>? NewPositionNotification = null;
+
+                public double Diameter => 20.0;
             }
         }
 

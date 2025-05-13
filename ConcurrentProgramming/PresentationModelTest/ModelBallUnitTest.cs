@@ -35,6 +35,7 @@ namespace FW_LJ_CP.Presentation.Model.Test
         {
             public event EventHandler<IPosition>? NewPositionNotification;
 
+            public double Diameter => 20.0;
             public void Dispose()
             {
                 throw new NotImplementedException();

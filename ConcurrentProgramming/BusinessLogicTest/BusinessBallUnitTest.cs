@@ -20,6 +20,8 @@ namespace FW_LJ_CP.BusinessLogic.Test
             public Data.IVector Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
             public event EventHandler<Data.IVector>? NewPositionNotification;
+
+            public double Diameter => 20.0;
             public void Move()
             {
                 NewPositionNotification?.Invoke(this, new VectorFixture(0.0, 0.0));
