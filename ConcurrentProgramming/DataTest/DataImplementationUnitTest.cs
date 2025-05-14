@@ -54,5 +54,47 @@
                 newInstance.CheckNumberOfBalls(x => Assert.Equal<int>(10, x));
             }
         }
+
+        [Fact]
+        public async Task BallMovementHappensOverTime()
+        {
+            using DataImplementation impl = new();
+            IVector? lastPosition = null;
+            IBall? ball = null;
+            ManualResetEventSlim positionUpdated = new(false);
+
+            impl.Start(1, (pos, b) =>
+            {
+                ball = b;
+                b.NewPositionNotification += (sender, vec) =>
+                {
+                    lastPosition = vec;
+                    positionUpdated.Set();
+                };
+            });
+
+            bool updated = positionUpdated.Wait(500);
+            Assert.True(updated);
+            Assert.NotNull(lastPosition);
+        }
+
+        [Fact]
+        public async Task CancellationStopsTasks()
+        {
+            DataImplementation impl = new DataImplementation();
+            int notificationCount = 0;
+
+            impl.Start(1, (pos, b) =>
+            {
+                b.NewPositionNotification += (sender, vec) => notificationCount++;
+            });
+
+            await Task.Delay(200);
+            impl.Dispose();
+            int countAfterDispose = notificationCount;
+
+            await Task.Delay(200);
+            Assert.Equal(countAfterDispose, notificationCount);
+        }
     }
 }

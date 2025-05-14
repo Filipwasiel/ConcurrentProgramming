@@ -4,15 +4,6 @@ namespace FW_LJ_CP.Data
 {
     internal class DataImplementation : DataAbstractAPI
     {
-        #region ctor
-
-        //public DataImplementation()
-        //{
-            
-        //}
-
-        #endregion ctor
-
         #region DataAbstractAPI
 
         public override void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler)
@@ -83,21 +74,17 @@ namespace FW_LJ_CP.Data
         private readonly object _lock = new();
         private CancellationTokenSource _cts;
         private bool Disposed = false;
-        //private readonly Timer MoveTimer;
         private Random RandomGenerator = new();
         private List<Ball> BallsList = [];
         private List<Task> _ballTasks = new();
 
         private void CheckCollisions(Ball currentBall)
         {
-            lock (_lock)
+            for (int i = 0; i < BallsList.Count; i++)
             {
-                for (int i = 0; i < BallsList.Count; i++)
+                for (int j = i + 1; j < BallsList.Count; j++)
                 {
-                    for (int j = i + 1; j < BallsList.Count; j++)
-                    {
-                        HandleElasticCollision(BallsList[i], BallsList[j]);
-                    }
+                    HandleElasticCollision(BallsList[i], BallsList[j]);
                 }
             }
         }
