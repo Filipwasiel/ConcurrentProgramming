@@ -6,10 +6,10 @@ namespace FW_LJ_CP.Data
     {
         #region ctor
 
-        public DataImplementation()
-        {
-            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(16.67));
-        }
+        //public DataImplementation()
+        //{
+            
+        //}
 
         #endregion ctor
 
@@ -21,22 +21,31 @@ namespace FW_LJ_CP.Data
                 throw new ObjectDisposedException(nameof(DataImplementation));
             if (upperLayerHandler == null)
                 throw new ArgumentNullException(nameof(upperLayerHandler));
-            Random random = new Random();
             lock (_lock)
             {
                 BallsList.Clear();
             }
-            for (int i = 0; i < numberOfBalls; i++)
+            _cts = new CancellationTokenSource();
+            for (int i=0; i < numberOfBalls; i++)
             {
-                Vector startingPosition = new(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
-                Vector startingVelocity = new((random.NextDouble() - 0.5) * 10, (random.NextDouble() - 0.5) * 10);
-                double randomMass = 1.0 + random.NextDouble() * 0.5; 
-                Ball newBall = new(startingPosition, startingVelocity, randomMass);
-                upperLayerHandler(startingPosition, newBall);
+                Ball newBall = CreateBall();
+                upperLayerHandler(newBall.Position, newBall);
                 lock (_lock)
                 {
                     BallsList.Add(newBall);
                 }
+                _ballTasks.Add(Task.Run(async () =>
+                {
+                    while (!_cts.Token.IsCancellationRequested)
+                    {
+                        lock (_lock)
+                        {
+                            newBall.Move(new Vector(newBall.Velocity.x, newBall.Velocity.y));
+                            CheckCollisions(newBall);
+                        }
+                        await Task.Delay(16, _cts.Token);
+                    }
+                }, _cts.Token));
             }
         }
 
@@ -50,7 +59,8 @@ namespace FW_LJ_CP.Data
             {
                 if (disposing)
                 {
-                    MoveTimer.Dispose();
+                    _cts?.Cancel();
+                    _cts?.Dispose();
                     BallsList.Clear();
                 }
                 Disposed = true;
@@ -71,15 +81,14 @@ namespace FW_LJ_CP.Data
         #region private
 
         private readonly object _lock = new();
-
-        //private bool disposedValue;
+        private CancellationTokenSource _cts;
         private bool Disposed = false;
-
-        private readonly Timer MoveTimer;
+        //private readonly Timer MoveTimer;
         private Random RandomGenerator = new();
         private List<Ball> BallsList = [];
+        private List<Task> _ballTasks = new();
 
-        private void Move(object? x)
+        private void CheckCollisions(Ball currentBall)
         {
             lock (_lock)
             {
@@ -90,12 +99,15 @@ namespace FW_LJ_CP.Data
                         HandleElasticCollision(BallsList[i], BallsList[j]);
                     }
                 }
-                foreach (Ball ball in BallsList)
-                {
-                    ball.Move(new Vector(ball.Velocity.x, ball.Velocity.y));
-                }
             }
-
+        }
+        private Ball CreateBall()
+        {
+            Vector startingPosition = new(RandomGenerator.Next(100, 400 - 100), RandomGenerator.Next(100, 400 - 100));
+            Vector startingVelocity = new((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10);
+            double randomMass = 1.0 + RandomGenerator.NextDouble() * 0.5;
+            Ball newBall = new(startingPosition, startingVelocity, randomMass);
+            return newBall;
         }
         private void HandleElasticCollision(Ball ball1, Ball ball2)
         {
