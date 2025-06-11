@@ -53,6 +53,7 @@ namespace FW_LJ_CP.Data
                     _cts?.Cancel();
                     _cts?.Dispose();
                     BallsList.Clear();
+                    _logger.Dispose();
                 }
                 Disposed = true;
             }
@@ -77,6 +78,8 @@ namespace FW_LJ_CP.Data
         private Random RandomGenerator = new();
         private List<Ball> BallsList = [];
         private List<Task> _ballTasks = new();
+        private int idIterator = 0;
+        private readonly CollisionLogger _logger = new();
 
         private void CheckCollisions(Ball currentBall)
         {
@@ -93,7 +96,8 @@ namespace FW_LJ_CP.Data
             Vector startingPosition = new(RandomGenerator.Next(100, 400 - 100), RandomGenerator.Next(100, 400 - 100));
             Vector startingVelocity = new((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10);
             double randomMass = 1.0 + RandomGenerator.NextDouble() * 0.5;
-            Ball newBall = new(startingPosition, startingVelocity, randomMass);
+            Ball newBall = new(startingPosition, startingVelocity, randomMass, idIterator);
+            idIterator++;
             return newBall;
         }
         private void HandleElasticCollision(Ball ball1, Ball ball2)
@@ -118,6 +122,10 @@ namespace FW_LJ_CP.Data
                 Vector impulseVector = impulse * normalizedDelta;
                 ball1.Velocity = velocity1 - impulseVector * mass2;
                 ball2.Velocity = velocity2 + impulseVector * mass1;
+
+                _logger.LogBall2BallCollision(
+                    ball1.Position.x, ball1.Position.y, ((Vector)ball1.Velocity).x, ((Vector)ball1.Velocity).y, ball1.ballId,
+                    ball2.Position.x, ball2.Position.y, ((Vector)ball2.Velocity).x, ((Vector)ball2.Velocity).y, ball2.ballId);
             }
         }
         #endregion private

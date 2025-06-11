@@ -6,13 +6,14 @@ namespace FW_LJ_CP.Data
 {
     #region ctor
 
-    internal Ball(Vector initialPosition, Vector initialVelocity, double mass)
+    internal Ball(Vector initialPosition, Vector initialVelocity, double mass, int Id)
     {
         Position = initialPosition;
         Velocity = initialVelocity;
             Mass = mass;
             Diameter = ComputeDiameter(mass);
-    }
+            ballId = Id;
+        }
 
     #endregion ctor
 
@@ -23,6 +24,8 @@ namespace FW_LJ_CP.Data
     public IVector Velocity { get; set; }
         public double Mass { get; private set; }
         public double Diameter { get; private set; }
+
+        public int ballId { get; }
 
         #endregion IBall
 
