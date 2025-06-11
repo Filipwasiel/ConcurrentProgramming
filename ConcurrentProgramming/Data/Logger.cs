@@ -32,16 +32,32 @@ namespace FW_LJ_CP.Data
             EnqueueLog(message);
         }
 
+        public void LogBall2WallCollision(
+            double x, double y, double vx, double vy, int ballId,
+            double radius, double tableWidth, double tableHeight)
+        {
+            string wallDirection;
+
+            if (x - radius <= 0) wallDirection = "ściana lewa";
+            else if (x + radius >= tableWidth - radius*2) wallDirection = "ściana prawa";
+            else if (y - radius <= 0) wallDirection = "ściana górna";
+            else if (y + radius >= tableHeight - radius*2) wallDirection = "ściana dolna";
+            else wallDirection = "nieznana";
+
+            string message = $"Wykryto kolizje kuli ze {wallDirection}: Ball (ID={ballId}, X={x:F2}, Y={y:F2}, prędkość x={vx:F2}, prędkość y={vy:F2})";
+            EnqueueLog(message);
+        }
+
         private void EnqueueLog(string message)
         {
-            string logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] - {message}";
+            string logEntry = $"[{DateTime.Now:HH:mm:ss}] - {message}";
             try
             {
                 _logBuffer.Add(logEntry);
             }
-            catch (InvalidOperationException) 
-            { 
-               
+            catch (InvalidOperationException)
+            {
+
             }
         }
 

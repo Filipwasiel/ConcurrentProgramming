@@ -124,5 +124,25 @@
             File.Delete(tempLogPath);
         }
 
+        [Fact]
+        public void Logger_WritesWallCollisionToFile()
+        {
+            string tempLogPath = Path.GetTempFileName();
+
+            using var logger = new CollisionLogger(tempLogPath);
+
+            logger.LogBall2WallCollision(0, 200, -1, 0, 42, 5.0, 400, 420);
+            logger.Stop();
+
+            string[] logLines = File.ReadAllLines(tempLogPath);
+
+            Assert.Single(logLines);
+            Assert.Contains("kolizje kuli ze ", logLines[0]);
+            Assert.Contains($"ID={42}", logLines[0]);
+            Assert.Contains($"X={0:F2}", logLines[0]);
+
+            File.Delete(tempLogPath);
+        }
+
     }
 }

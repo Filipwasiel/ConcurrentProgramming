@@ -31,7 +31,7 @@ namespace FW_LJ_CP.Data
                     {
                         lock (_lock)
                         {
-                            newBall.Move(new Vector(newBall.Velocity.x, newBall.Velocity.y));
+                            newBall.Move(new Vector(newBall.Velocity.x, newBall.Velocity.y), TableWidth, TableHeight, _logger);
                             CheckCollisions(newBall);
                         }
                         await Task.Delay(16, _cts.Token);
@@ -80,6 +80,8 @@ namespace FW_LJ_CP.Data
         private List<Task> _ballTasks = new();
         private int idIterator = 0;
         private readonly CollisionLogger _logger = new();
+        private const double TableWidth = 400.0;
+        private const double TableHeight = 420.0;
 
         private void CheckCollisions(Ball currentBall)
         {

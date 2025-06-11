@@ -33,29 +33,37 @@ namespace FW_LJ_CP.Data
 
         internal Vector Position { get; private set; }
 
-        public const double TableWidth = 400;
-    public const double TableHeight = 420;
-
         private void RaiseNewPositionChangeNotification()
     {
         NewPositionNotification?.Invoke(this, Position);
     }
 
-    internal void Move(Vector delta)
+    internal void Move(Vector delta, double tableWidth, double tableHeight, CollisionLogger? logger = null)
     {
-            double newX = Math.Clamp(Position.x + delta.x, 0, TableWidth - Diameter);
-            double newY = Math.Clamp(Position.y + delta.y, 0, TableHeight - Diameter);
+            bool wallHit = false;
+            double newX = Math.Clamp(Position.x + delta.x, 0, tableWidth - Diameter);
+            double newY = Math.Clamp(Position.y + delta.y, 0, tableHeight - Diameter);
 
-            if (newX == 0 || newX == TableWidth - Diameter)
+            if (newX == 0 || newX == tableWidth - Diameter)
             {
                 Velocity = new Vector(-Velocity.x, Velocity.y);
+                wallHit = true;
             }
-            if (newY == 0 || newY == TableHeight - Diameter)
+            if (newY == 0 || newY == tableHeight - Diameter)
             {
                 Velocity = new Vector(Velocity.x, -Velocity.y);
+                wallHit = true;
             }
             Position = new Vector(newX, newY);
-        RaiseNewPositionChangeNotification();
+
+            if(logger != null && wallHit)
+            {
+                logger.LogBall2WallCollision(
+                    Position.x, Position.y, Velocity.x, Velocity.y, ballId,
+                    Diameter / 2.0, tableWidth, tableHeight);
+            }
+
+            RaiseNewPositionChangeNotification();
     }
 
         private static double ComputeDiameter(double mass)
