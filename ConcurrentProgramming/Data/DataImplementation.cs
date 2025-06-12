@@ -16,6 +16,7 @@ namespace FW_LJ_CP.Data
             {
                 BallsList.Clear();
             }
+            //_logger = new CollisionLogger();
             _cts = new CancellationTokenSource();
             for (int i=0; i < numberOfBalls; i++)
             {
@@ -125,9 +126,7 @@ namespace FW_LJ_CP.Data
                 ball1.Velocity = velocity1 - impulseVector * mass2;
                 ball2.Velocity = velocity2 + impulseVector * mass1;
 
-                _logger.LogBall2BallCollision(
-                    ball1.Position.x, ball1.Position.y, ((Vector)ball1.Velocity).x, ((Vector)ball1.Velocity).y, ball1.ballId,
-                    ball2.Position.x, ball2.Position.y, ((Vector)ball2.Velocity).x, ((Vector)ball2.Velocity).y, ball2.ballId);
+                _logger.LogBall2BallCollision(ball1, ball2);
             }
         }
         #endregion private

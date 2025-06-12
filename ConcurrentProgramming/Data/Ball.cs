@@ -58,9 +58,7 @@ namespace FW_LJ_CP.Data
 
             if(logger != null && wallHit)
             {
-                logger.LogBall2WallCollision(
-                    Position.x, Position.y, Velocity.x, Velocity.y, ballId,
-                    Diameter / 2.0, tableWidth, tableHeight);
+                logger.LogBall2WallCollision(this, tableWidth, tableHeight);
             }
 
             RaiseNewPositionChangeNotification();

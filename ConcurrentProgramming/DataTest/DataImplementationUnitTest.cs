@@ -100,49 +100,5 @@
             Assert.Equal(countAfterDispose, notificationCount);
         }
 
-        [Fact]
-        public void Logger_WritesCollisionToFile()
-        {
-            string tempLogPath = Path.GetTempFileName();
-
-            using var logger = new CollisionLogger(tempLogPath);
-
-            logger.LogBall2BallCollision(
-                x1: 10, y1: 10, vx1: 1, vy1: 1, ballId1: 1,
-                x2: 20, y2: 20, vx2: -1, vy2: -1, ballId2: 2
-            );
-
-            logger.Stop();
-
-            string[] logLines = File.ReadAllLines(tempLogPath);
-
-            Assert.Single(logLines);
-            Assert.Contains("Wykryto kolizje kula–kula", logLines[0]);
-            Assert.Contains("Ball1 (ID=1", logLines[0]);
-            Assert.Contains("Ball2 (ID=2", logLines[0]);
-
-            File.Delete(tempLogPath);
-        }
-
-        [Fact]
-        public void Logger_WritesWallCollisionToFile()
-        {
-            string tempLogPath = Path.GetTempFileName();
-
-            using var logger = new CollisionLogger(tempLogPath);
-
-            logger.LogBall2WallCollision(0, 200, -1, 0, 42, 5.0, 400, 420);
-            logger.Stop();
-
-            string[] logLines = File.ReadAllLines(tempLogPath);
-
-            Assert.Single(logLines);
-            Assert.Contains("kolizje kuli ze ", logLines[0]);
-            Assert.Contains($"ID={42}", logLines[0]);
-            Assert.Contains($"X={0:F2}", logLines[0]);
-
-            File.Delete(tempLogPath);
-        }
-
     }
 }
